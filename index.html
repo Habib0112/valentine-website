@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Will You Be My Valentine?</title>
+  <style>
+    /* REVERTED STYLES */
+    body { 
+      background: #ffd1dc; 
+      text-align: center; 
+      font-family: "Comic Sans MS", cursive;
+      padding: 20px;
+      overflow: hidden; /* For heart rain */
+    }
+    /* Original buttons */
+    button {
+      background: #ff69b4;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin: 10px;
+      transition: 0.2s;
+    }
+    button:hover {
+      background: #ff1493;
+      transform: scale(1.05);
+    }
+    /* Heart rain */
+    .heart-rain {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-100px) rotate(0deg); }
+      100% { transform: translateY(100vh) rotate(360deg); }
+    }
+    /* Calendar styling (reverted) */
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      max-width: 500px;
+      margin: 20px auto;
+    }
+    .calendar div {
+      padding: 10px;
+      background: white;
+      border: 2px solid pink;
+      cursor: pointer;
+    }
+    /* Hide elements by default */
+    #calendarPage, .bean-gif, #selectedDate {
+      display: none;
+    }
+    /* Center Mr. Bean GIF */
+    .bean-gif {
+      display: block;
+      margin: 0 auto 20px;
+      width: 150px;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+  <!-- Heart rain container -->
+  <div class="heart-rain"></div>
+
+  <!-- First Page -->
+  <div id="card">
+    <h1>💖 Hey Bubba... 💖</h1>
+    <div class="gif-container">
+      <img src="https://media.tenor.com/2csFlkJ3TyAAAAAj/tkthao219-bubududu.gif" width="300"> 
+    </div>
+    <h2>Will you be my Valentine?</h2>
+    <button onclick="openCard()">Click to Open!</button>
+  </div>
+
+  <!-- Second Page -->
+  <div id="message" style="display:none;">
+    <h2>You’re my favorite person because...</h2>
+    <img src="https://i.imgur.com/T78wk1i.gif="300">
+    <p>Honestly, no one else makes me feel the way you do. You just get me, and I don’t have to pretend to be anything I’m not when I’m with you. You’re always there, whether it’s to hype me up, call me out when I need it, or just chill and do stupid shit together HAHAHA. I don’t think you even realise how much you mean to me, but trust me, you do. I am so greatful for you and life just wouldn’t be the same without you. 💖</p>
+    <button onclick="showCalendar()">YES! Absolutely!</button>
+    <button id="noButton" onmouseover="dodge()">Nope, Not a Chance</button>
+  </div>
+
+  <!-- Calendar Page -->
+  <div id="calendarPage">
+    <img class="bean-gif" src="https://media.tenor.com/vedf8zRRCYQAAAAC/mr-bean-thumbs-up.gif" width="150">
+    <h2>Pick a date for our adventure! 📅💖</h2>
+    <div class="calendar" id="calendar"></div>
+    <p id="selectedDate" style="font-size:1.2em;"></p>
+  </div>
+
+  <script>
+    // ===== HEART RAIN =====
+    function createHearts() {
+      setInterval(() => {
+        const heart = document.createElement('div');
+        heart.innerHTML = '❤️';
+        heart.style.position = 'fixed';
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.fontSize = Math.random() * 30 + 20 + 'px'; // Random size (20px to 50px)
+        heart.style.animation = `fall ${Math.random() * 3 + 2}s linear infinite`; // Random speed (2s to 5s)
+        document.querySelector('.heart-rain').appendChild(heart);
+        
+        // Remove hearts after animation
+        setTimeout(() => heart.remove(), 5000);
+      }, 300);
+    }
+    createHearts(); // Start heart rain!
+
+    // ===== REST OF THE CODE =====
+    function openCard() {
+      document.getElementById("card").style.display = "none";
+      document.getElementById("message").style.display = "block";
+    }
+
+    function dodge() {
+      let button = document.getElementById("noButton");
+      button.style.transform = `translate(${Math.random()*500 - 250}px, ${Math.random()*500 - 250}px)`;
+    }
+
+    function showCalendar() {
+      confetti({ particleCount: 300, spread: 100 });
+      document.getElementById("message").style.display = "none";
+      document.getElementById("calendarPage").style.display = "block";
+      document.querySelector(".bean-gif").style.display = "block"; // Show Mr. Bean GIF
+      document.getElementById("selectedDate").style.display = "block"; // Show selected date text
+      
+      const calendar = document.getElementById("calendar");
+      calendar.innerHTML = '';
+      
+      // Calendar header (Feb 1 2025 = Saturday)
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      days.forEach(day => calendar.innerHTML += `<div style="background:#ff69b4;color:white;">${day}</div>`);
+
+      // Add 5 empty cells (since Feb 1 is Saturday)
+      for(let i=0; i<6; i++) calendar.innerHTML += '<div></div>';
+
+      // Add dates 1-28
+      for(let i=1; i<=28; i++) {
+        const dateDiv = document.createElement('div');
+        dateDiv.textContent = i;
+        dateDiv.onclick = () => {
+          document.getElementById("selectedDate").innerHTML = 
+            `🎉 Perfect! <b>${i} February 2025</b> it is!<br>
+            Get ready for the best date ever! 💘`;
+        };
+        calendar.appendChild(dateDiv);
+      }
+    }
+  </script>
+</body>
+</html>
