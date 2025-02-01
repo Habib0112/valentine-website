@@ -61,10 +61,26 @@
       margin: 0 auto 20px;
       width: 150px;
     }
+    /* Unmute button styling */
+    #unmuteButton {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
+  <!-- HTML5 Audio Element -->
+  <audio id="valentineMusic" loop>
+    <source src="valentine-music.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Unmute Button -->
+  <button id="unmuteButton" onclick="playMusic()">🔇 Click to Play Music</button>
+
   <!-- Heart rain container -->
   <div class="heart-rain"></div>
 
@@ -81,7 +97,7 @@
   <!-- Second Page -->
   <div id="message" style="display:none;">
     <h2>You’re my favorite person because...</h2>
-    <img src="https://i.imgur.com/T78wk1i.gif="300">
+    <img src="https://i.imgur.com/T78wk1i.gif="600">
     <p>Honestly, no one else makes me feel the way you do. You just get me, and I don’t have to pretend to be anything I’m not when I’m with you. You’re always there, whether it’s to hype me up, call me out when I need it, or just chill and do stupid shit together HAHAHA. I don’t think you even realise how much you mean to me, but trust me, you do. I am so greatful for you and life just wouldn’t be the same without you. 💖</p>
     <button onclick="showCalendar()">YES! Absolutely!</button>
     <button id="noButton" onmouseover="dodge()">Nope, Not a Chance</button>
@@ -125,15 +141,21 @@
     }
 
     function showCalendar() {
-      confetti({ particleCount: 300, spread: 100 });
+      confetti({ 
+        particleCount: 500, // Increase the number of particles
+        spread: 150,        // Increase the spread
+        origin: { y: 0.6 }, // Adjust the origin point
+        scalar: 1.5         // Increase the size of the confetti
+      });
+
       document.getElementById("message").style.display = "none";
       document.getElementById("calendarPage").style.display = "block";
       document.querySelector(".bean-gif").style.display = "block"; // Show Mr. Bean GIF
       document.getElementById("selectedDate").style.display = "block"; // Show selected date text
-      
+
       const calendar = document.getElementById("calendar");
       calendar.innerHTML = '';
-      
+
       // Calendar header (Feb 1 2025 = Saturday)
       const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
       days.forEach(day => calendar.innerHTML += `<div style="background:#ff69b4;color:white;">${day}</div>`);
@@ -152,6 +174,13 @@
         };
         calendar.appendChild(dateDiv);
       }
+    }
+
+    // ===== PLAY MUSIC =====
+    function playMusic() {
+      const audio = document.getElementById('valentineMusic');
+      audio.play(); // Play the audio
+      document.getElementById('unmuteButton').style.display = 'none'; // Hide the button
     }
   </script>
 </body>
